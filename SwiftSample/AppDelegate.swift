@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import RealmSwift
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -16,6 +17,49 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
+        
+        // realmのマイグレーション処理
+        let config = Realm.Configuration(
+            schemaVersion: 1,
+            migrationBlock: { migration, oldSchemaVersion in
+                if (oldSchemaVersion < 1) {}
+        })
+        
+        Realm.Configuration.defaultConfiguration = config
+        
+        // 都市のデータを登録
+        var locations:Array<WeatherLocation> = []
+        
+        let sapporo = WeatherLocation()
+        sapporo.city = "札幌"
+        sapporo.id = "016010"
+        locations.append(sapporo)
+        
+        let sendai = WeatherLocation()
+        sendai.city = "仙台"
+        sendai.id = "040010"
+        locations.append(sendai)
+        
+        let tokyo = WeatherLocation()
+        tokyo.city = "東京"
+        tokyo.id = "130010"
+        locations.append(tokyo)
+        
+        for wl in locations{
+            // realmにレコードが登録されているかチェック
+            let realm = try! Realm()
+            
+            let predicate = NSPredicate(format: "id = %@", wl.id)
+            let wlArray = realm.objects(WeatherLocation).filter(predicate)
+            
+            if wlArray.isEmpty {
+                try! realm.write {
+                    // 新規追加
+                    realm.add(wl, update: true)
+                }
+            }
+        }
+        
         return true
     }
 
