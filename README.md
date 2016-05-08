@@ -2,6 +2,9 @@
   
 #### Swift + Alamofire + Realm を用いて天気予報API情報の取得、保存を行う  
   
+![都市一覧](http://cdn-ak.f.st-hatena.com/images/fotolife/j/jtaka1012/20160509/20160509071729.png)  
+![天気一覧](http://cdn-ak.f.st-hatena.com/images/fotolife/j/jtaka1012/20160509/20160509071735.png)
+  
 ##### 現在できていること  
 - 天気予報はLivedoor Weather APIより取得 (OAuth認証不要)  
 - Realmにより各都市の天気予報情報を1日ずつ取得  
